@@ -1,0 +1,20 @@
+Package: BBCAnalyzer
+Type: Package
+Title: BBCAnalyzer: an R/Bioconductor package for visualizing base
+        counts
+Version: 0.99.4
+Date: 2015-07-20
+Author: Sarah Sandmann
+Maintainer: Sarah Sandmann <sarah.sandmann@uni-muenster.de>
+Description: BBCAnalyzer is a package for visualizing the relative or
+        absolute number of bases, deletions and insertions at defined
+        positions in sequence alignment data available as bam files in
+        comparison to the reference bases. Markers for the relative
+        base frequencies, the mean quality of the detected bases, known
+        mutations or polymorphisms and variants called in the data may
+        additionally be included in the plots.
+License: LGPL-3
+Imports: VariantAnnotation, Rsamtools
+Suggests: BSgenome.Hsapiens.UCSC.hg19
+biocViews: Sequencing, Alignment, Coverage, GeneticVariability, SNP
+NeedsCompilation: no

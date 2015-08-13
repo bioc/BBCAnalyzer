@@ -1,0 +1,4 @@
+export('analyzeBases')
+export('analyzeBasesPlotOnly')
+import('VariantAnnotation')
+import('Rsamtools')
