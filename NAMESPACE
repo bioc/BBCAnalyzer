@@ -1,4 +1,5 @@
 export('analyzeBases')
 export('analyzeBasesPlotOnly')
+import('SummarizedExperiment')
 import('VariantAnnotation')
 import('Rsamtools')
