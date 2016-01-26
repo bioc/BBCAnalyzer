@@ -1,6 +1,6 @@
 #Plot counts
-plotCountsPerSample_abs<-function(calling,frequency_weight,long_insert,i,j,k){
-    plot_abs<-matrix(rep(0,6*length(calling[[j]][,1])),ncol=6)
+plotCountsPerSample_abs<-function(calling,frequency_weight,long_insert,i,j,k,
+                                  plot_abs){
     if(k==1){
         plot_abs[i,k]<-frequency_weight[[j]][i-long_insert,3+k]
         if(is.na(plot_abs[i,k])){
@@ -42,8 +42,7 @@ plotCountsPerSample_abs<-function(calling,frequency_weight,long_insert,i,j,k){
 
 plotCountsPerSample_col<-function(calling,frequency_weight,long_insert,
                                   qual_lower_bound,qual_upper_bound,
-                                  A_col,C_col,G_col,T_col,i,j,k){
-    plot_col<-matrix(rep(0,6*length(calling[[j]][,1])),ncol=6)
+                                  A_col,C_col,G_col,T_col,i,j,k,plot_col){
     if(k==1&&!is.na(frequency_weight[[j]][i-long_insert,4+k])){
         if(round(frequency_weight[[j]][i-long_insert,4+k],digits=1)<qual_lower_bound){
             plot_col[i,1]<-"chartreuse"
@@ -101,8 +100,8 @@ plotCountsPerSample_col<-function(calling,frequency_weight,long_insert,
     return(plot_col)
 }
 
-plotCountsPerSample_insert<-function(calling,frequency_weight,long_insert,i,j,k){
-    plot_insert<-matrix(rep(0,4*length(calling[[j]][,1])),ncol=4)
+plotCountsPerSample_insert<-function(calling,frequency_weight,long_insert,i,j,k,
+                                     plot_insert){
     if(k==1){
         plot_insert[i,k]<-frequency_weight[[j]][i-long_insert,13+k]
         if(is.na(plot_insert[i,k])){
@@ -132,8 +131,7 @@ plotCountsPerSample_insert<-function(calling,frequency_weight,long_insert,i,j,k)
 
 plotCountsPerSample_col_insert<-function(calling,frequency_weight,long_insert,
                                qual_lower_bound,qual_upper_bound,
-                               A_col,C_col,G_col,T_col,i,j,k){
-    plot_col_insert<-matrix(rep(NA,4*length(calling[[j]][,1])),ncol=4)
+                               A_col,C_col,G_col,T_col,i,j,k,plot_col_insert){
     if(k==1&&!is.na(frequency_weight[[j]][i-long_insert,14+k])){
         if(round(frequency_weight[[j]][i-long_insert,14+k])<qual_lower_bound){
             plot_col_insert[i,1]<-"chartreuse"
@@ -185,8 +183,7 @@ plotCountsPerSample_col_insert<-function(calling,frequency_weight,long_insert,
     return(plot_col_insert)
 }
 
-plotCountsPerSample_ref<-function(calling,dbsnp_file,vcf.comp,j,i){
-    plot_ref<-matrix(rep(0,6*length(calling[[j]][,1])),ncol=6)
+plotCountsPerSample_ref<-function(calling,dbsnp_file,vcf.comp,j,i,plot_ref){
     if(dbsnp_file!=""&&length(rowRanges(vcf.comp))==1
        &&length(rowRanges(vcf.comp)$REF)>0
        &&length(rowRanges(vcf.comp)$ALT)>0
@@ -307,13 +304,13 @@ plotCountsPerSample_plot<-function(directory2,samples,plot_abs,plot_col,abs_max,
         steps<-seq(0.7,2*0.65,by=(2*0.65-0.7)/length(A_col))-1.2*2
     }
     rect(xleft=steps[1:length(steps)-1],xright=steps[2:length(steps)],
-         ybottom=abs_max*0.88,ytop=abs_max*0.93,lwd=0,col=A_col)
+         ybottom=abs_max*0.88,ytop=abs_max*0.93,lwd=0,col=A_col,border=NA)
     rect(xleft=steps[1:length(steps)-1],xright=steps[2:length(steps)],
-         ybottom=abs_max*0.81,ytop=abs_max*0.86,lwd=0,col=C_col)
+         ybottom=abs_max*0.81,ytop=abs_max*0.86,lwd=0,col=C_col,border=NA)
     rect(xleft=steps[1:length(steps)-1],xright=steps[2:length(steps)],
-         ybottom=abs_max*0.74,ytop=abs_max*0.79,lwd=0,col=G_col)
+         ybottom=abs_max*0.74,ytop=abs_max*0.79,lwd=0,col=G_col,border=NA)
     rect(xleft=steps[1:length(steps)-1],xright=steps[2:length(steps)],
-         ybottom=abs_max*0.67,ytop=abs_max*0.72,lwd=0,col=T_col)
+         ybottom=abs_max*0.67,ytop=abs_max*0.72,lwd=0,col=T_col,border=NA)
     text(x=length(plot_abs[[j]][,1])*0.75-1.2*length(plot_abs[[j]][,1]),
          y=c(abs_max*0.90),"A",cex=2)
     text(x=length(plot_abs[[j]][,1])*0.75-1.2*length(plot_abs[[j]][,1]),
@@ -366,8 +363,7 @@ plotCountsPerSample_plot<-function(directory2,samples,plot_abs,plot_col,abs_max,
 
 plotCountsPerSampleRelative_col<-function(calling,frequency_weight,long_insert,
                                           qual_lower_bound,qual_upper_bound,
-                                          A_col,C_col,G_col,T_col,i,j,k){
-    plot_col<-matrix(rep(0,6*length(calling[[j]][,1])),ncol=6)
+                                          A_col,C_col,G_col,T_col,i,j,k,plot_col){
     if(k==4&&!is.na(frequency_weight[[j]][i-long_insert,1+k])){
         if(round(frequency_weight[[j]][i-long_insert,1+k],digits=1)<qual_lower_bound){
             plot_col[i,1]<-"chartreuse"
@@ -422,8 +418,7 @@ plotCountsPerSampleRelative_col<-function(calling,frequency_weight,long_insert,
 }
 
 plotCountsPerSampleRelative_insert<-function(calling,frequency_weight,
-                                             long_insert,i,j,k){
-    plot_insert<-matrix(rep(0,4*length(calling[[j]][,1])),ncol=4)
+                                             long_insert,i,j,k,plot_insert){
     if(k==1&&!(is.na(frequency_weight[[j]][i-long_insert,4])
                &&is.na(frequency_weight[[j]][i-long_insert,6])
                &&is.na(frequency_weight[[j]][i-long_insert,8])
@@ -470,8 +465,8 @@ plotCountsPerSampleRelative_insert<-function(calling,frequency_weight,
 plotCountsPerSampleRelative_col_insert<-function(calling,frequency_weight,
                                                  long_insert,qual_lower_bound,
                                                  qual_upper_bound,
-                                                 A_col,C_col,G_col,T_col,i,j,k){
-    plot_col_insert<-matrix(rep(NA,4*length(calling[[j]][,1])),ncol=4)
+                                                 A_col,C_col,G_col,T_col,i,j,k,
+                                                 plot_col_insert){
     if(k==1&&!is.na(frequency_weight[[j]][i-long_insert,14+k])){
         if(round(frequency_weight[[j]][i-long_insert,14+k])<qual_lower_bound){
             plot_col_insert[[j]][i,1]<-"chartreuse"
@@ -571,13 +566,13 @@ plotCountsPerSampleRelative_plot<-function(directory2,samples,plot_rel,plot_col,
         steps<-seq(0.7,2*0.65,by=(2*0.65-0.7)/length(A_col))-1.2*2
     }
     rect(xleft=steps[1:length(steps)-1],xright=steps[2:length(steps)],
-         ybottom=rel_max*0.88,ytop=rel_max*0.93,lwd=0,col=A_col)
+         ybottom=rel_max*0.88,ytop=rel_max*0.93,lwd=0,col=A_col,border=NA)
     rect(xleft=steps[1:length(steps)-1],xright=steps[2:length(steps)],
-         ybottom=rel_max*0.81,ytop=rel_max*0.86,lwd=0,col=C_col)
+         ybottom=rel_max*0.81,ytop=rel_max*0.86,lwd=0,col=C_col,border=NA)
     rect(xleft=steps[1:length(steps)-1],xright=steps[2:length(steps)],
-         ybottom=rel_max*0.74,ytop=rel_max*0.79,lwd=0,col=G_col)
+         ybottom=rel_max*0.74,ytop=rel_max*0.79,lwd=0,col=G_col,border=NA)
     rect(xleft=steps[1:length(steps)-1],xright=steps[2:length(steps)],
-         ybottom=rel_max*0.67,ytop=rel_max*0.72,lwd=0,col=T_col)
+         ybottom=rel_max*0.67,ytop=rel_max*0.72,lwd=0,col=T_col,border=NA)
     text(x=length(plot_rel[[j]][,1])*0.75-1.2*length(plot_rel[[j]][,1]),
          y=c(rel_max*0.90),"A",cex=2)
     text(x=length(plot_rel[[j]][,1])*0.75-1.2*length(plot_rel[[j]][,1]),
@@ -627,8 +622,8 @@ plotCountsPerSampleRelative_plot<-function(directory2,samples,plot_rel,plot_col,
 }
 
 
-plotCountsPerTarget_abs<-function(samples,frequency_weight,long_insert,i,j,k){
-    plot_abs<-matrix(rep(0,6*length(samples[,1])),ncol=6)
+plotCountsPerTarget_abs<-function(samples,frequency_weight,long_insert,i,j,k,
+                                  plot_abs){
     if(k==1){
         plot_abs[i,k]<-frequency_weight[[i]][j-long_insert[i],3+k]
         if(is.na(plot_abs[i,k])){
@@ -670,8 +665,7 @@ plotCountsPerTarget_abs<-function(samples,frequency_weight,long_insert,i,j,k){
 
 plotCountsPerTarget_col<-function(samples,frequency_weight,long_insert,
                                   qual_lower_bound,qual_upper_bound,
-                                  A_col,C_col,G_col,T_col,i,j,k){
-    plot_col<-matrix(rep(0,6*length(samples[,1])),ncol=6)
+                                  A_col,C_col,G_col,T_col,i,j,k,plot_col){
     if(k==1&&!is.na(frequency_weight[[i]][j-long_insert[i],4+k])){
         if(round(frequency_weight[[i]][j-long_insert[i],4+k])<qual_lower_bound){
             plot_col[i,1]<-"chartreuse"
@@ -729,8 +723,8 @@ plotCountsPerTarget_col<-function(samples,frequency_weight,long_insert,
     return(plot_col)
 }
 
-plotCountsPerTarget_insert<-function(samples,frequency_weight,long_insert,i,j,k){
-    plot_insert<-matrix(rep(0,4*length(samples[,1])),ncol=4)
+plotCountsPerTarget_insert<-function(samples,frequency_weight,long_insert,i,j,k,
+                                     plot_insert){
     if(k==1){
         plot_insert[i,k]<-frequency_weight[[i]][j-long_insert[i],13+k]
         if(is.na(plot_insert[i,k])){
@@ -760,8 +754,8 @@ plotCountsPerTarget_insert<-function(samples,frequency_weight,long_insert,i,j,k)
 
 plotCountsPerTarget_col_insert<-function(samples,frequency_weight,long_insert,
                                          qual_lower_bound,qual_upper_bound,
-                                         A_col,C_col,G_col,T_col,i,j,k){
-    plot_col_insert<-matrix(rep(NA,4*length(samples[,1])),ncol=4)
+                                         A_col,C_col,G_col,T_col,i,j,k,
+                                         plot_col_insert){
     if(k==1&&!is.na(frequency_weight[[i]][j-long_insert[i],14+k])){
         if(round(frequency_weight[[i]][j-long_insert[i],14+k])<qual_lower_bound){
             plot_col_insert[i,1]<-"chartreuse"
@@ -813,8 +807,8 @@ plotCountsPerTarget_col_insert<-function(samples,frequency_weight,long_insert,
     return(plot_col_insert)
 }
 
-plotCountsPerTarget_ref<-function(samples,calling,dbsnp_file,vcf.comp,j,i){
-    plot_ref<-matrix(rep(0,6*length(samples[,1])),ncol=6)
+plotCountsPerTarget_ref<-function(samples,calling,dbsnp_file,vcf.comp,j,i,
+                                  plot_ref){
     if(dbsnp_file!=""&&length(rowRanges(vcf.comp))==1
        &&length(rowRanges(vcf.comp)$REF)>0
        &&length(rowRanges(vcf.comp)$ALT)>0
@@ -959,13 +953,13 @@ plotCountsPerTarget_plot<-function(directory2,samples,plot_abs,plot_col,abs_max,
         steps<-seq(0.7,2*0.65,by=(2*0.65-0.7)/length(A_col))-1.2*2
     }   
     rect(xleft=steps[1:length(steps)-1],xright=steps[2:length(steps)],
-         ybottom=abs_max*0.88,ytop=abs_max*0.93,lwd=0,col=A_col)
+         ybottom=abs_max*0.88,ytop=abs_max*0.93,lwd=0,col=A_col,border=NA)
     rect(xleft=steps[1:length(steps)-1],xright=steps[2:length(steps)],
-         ybottom=abs_max*0.81,ytop=abs_max*0.86,lwd=0,col=C_col)
+         ybottom=abs_max*0.81,ytop=abs_max*0.86,lwd=0,col=C_col,border=NA)
     rect(xleft=steps[1:length(steps)-1],xright=steps[2:length(steps)],
-         ybottom=abs_max*0.74,ytop=abs_max*0.79,lwd=0,col=G_col)
+         ybottom=abs_max*0.74,ytop=abs_max*0.79,lwd=0,col=G_col,border=NA)
     rect(xleft=steps[1:length(steps)-1],xright=steps[2:length(steps)],
-         ybottom=abs_max*0.67,ytop=abs_max*0.72,lwd=0,col=T_col)
+         ybottom=abs_max*0.67,ytop=abs_max*0.72,lwd=0,col=T_col,border=NA)
     text(x=length(plot_abs[[j]][,1])*0.75-1.2*length(plot_abs[[j]][,1]),
          y=c(abs_max*0.90),"A",cex=2)
     text(x=length(plot_abs[[j]][,1])*0.75-1.2*length(plot_abs[[j]][,1]),
@@ -1018,8 +1012,7 @@ plotCountsPerTarget_plot<-function(directory2,samples,plot_abs,plot_col,abs_max,
 
 plotCountsPerTargetRelative_col<-function(samples,frequency_weight,long_insert,
                                           qual_lower_bound,qual_upper_bound,
-                                          A_col,C_col,G_col,T_col,i,j,k){
-    plot_col<-matrix(rep(0,6*length(samples[,1])),ncol=6)
+                                          A_col,C_col,G_col,T_col,i,j,k,plot_col){
     if(k==4&&!is.na(frequency_weight[[i]][j-long_insert[i],1+k])){
         if(round(frequency_weight[[i]][j-long_insert[i],1+k])<qual_lower_bound){
             plot_col[i,1]<-"chartreuse"
@@ -1074,8 +1067,7 @@ plotCountsPerTargetRelative_col<-function(samples,frequency_weight,long_insert,
 }
 
 plotCountsPerTargetRelative_insert<-function(samples,frequency_weight,
-                                             long_insert,i,j,k){
-    plot_insert<-matrix(rep(0,4*length(samples[,1])),ncol=4)
+                                             long_insert,i,j,k,plot_insert){
     if(k==1&&!(is.na(frequency_weight[[i]][j-long_insert[i],4])
                &&is.na(frequency_weight[[i]][j-long_insert[i],6])
                &&is.na(frequency_weight[[i]][j-long_insert[i],8])
@@ -1122,8 +1114,8 @@ plotCountsPerTargetRelative_insert<-function(samples,frequency_weight,
 plotCountsPerTargetRelative_col_insert<-function(samples,frequency_weight,
                                                  long_insert,qual_lower_bound,
                                                  qual_upper_bound,
-                                                 A_col,C_col,G_col,T_col,i,j,k){
-    plot_col_insert<-matrix(rep(NA,4*length(samples[,1])),ncol=4)
+                                                 A_col,C_col,G_col,T_col,i,j,k,
+                                                 plot_col_insert){
     if(k==1&&!is.na(frequency_weight[[i]][j-long_insert[i],14+k])){
         if(round(frequency_weight[[i]][j-long_insert[i],14+k])<qual_lower_bound){
             plot_col_insert[i,1]<-"chartreuse"
@@ -1244,13 +1236,13 @@ plotCountsPerTargetRelative_plot<-function(directory2,samples,plot_rel,plot_col,
         steps<-seq(0.7,2*0.65,by=(2*0.65-0.7)/length(A_col))-1.2*2
     }    
     rect(xleft=steps[1:length(steps)-1],xright=steps[2:length(steps)],
-         ybottom=rel_max*0.88,ytop=rel_max*0.93,lwd=0,col=A_col)
+         ybottom=rel_max*0.88,ytop=rel_max*0.93,lwd=0,col=A_col,border=NA)
     rect(xleft=steps[1:length(steps)-1],xright=steps[2:length(steps)],
-         ybottom=rel_max*0.81,ytop=rel_max*0.86,lwd=0,col=C_col)
+         ybottom=rel_max*0.81,ytop=rel_max*0.86,lwd=0,col=C_col,border=NA)
     rect(xleft=steps[1:length(steps)-1],xright=steps[2:length(steps)],
-         ybottom=rel_max*0.74,ytop=rel_max*0.79,lwd=0,col=G_col)
+         ybottom=rel_max*0.74,ytop=rel_max*0.79,lwd=0,col=G_col,border=NA)
     rect(xleft=steps[1:length(steps)-1],xright=steps[2:length(steps)],
-         ybottom=rel_max*0.67,ytop=rel_max*0.72,lwd=0,col=T_col)
+         ybottom=rel_max*0.67,ytop=rel_max*0.72,lwd=0,col=T_col,border=NA)
     text(x=length(plot_rel[[j]][,1])*0.75-1.2*length(plot_rel[[j]][,1]),
          y=c(rel_max*0.90),"A",cex=2)
     text(x=length(plot_rel[[j]][,1])*0.75-1.2*length(plot_rel[[j]][,1]),
@@ -1563,13 +1555,13 @@ plotCountsPerSampleVcf_plot<-function(directory2,samples,plot_abs,plot_col,
         steps<-seq(0.7,2*0.65,by=(2*0.65-0.7)/length(A_col))-1.2*2
     }
     rect(xleft=steps[1:length(steps)-1],xright=steps[2:length(steps)],
-         ybottom=abs_max*0.88,ytop=abs_max*0.93,lwd=0,col=A_col)
+         ybottom=abs_max*0.88,ytop=abs_max*0.93,lwd=0,col=A_col,border=NA)
     rect(xleft=steps[1:length(steps)-1],xright=steps[2:length(steps)],
-         ybottom=abs_max*0.81,ytop=abs_max*0.86,lwd=0,col=C_col)
+         ybottom=abs_max*0.81,ytop=abs_max*0.86,lwd=0,col=C_col,border=NA)
     rect(xleft=steps[1:length(steps)-1],xright=steps[2:length(steps)],
-         ybottom=abs_max*0.74,ytop=abs_max*0.79,lwd=0,col=G_col)
+         ybottom=abs_max*0.74,ytop=abs_max*0.79,lwd=0,col=G_col,border=NA)
     rect(xleft=steps[1:length(steps)-1],xright=steps[2:length(steps)],
-         ybottom=abs_max*0.67,ytop=abs_max*0.72,lwd=0,col=T_col)
+         ybottom=abs_max*0.67,ytop=abs_max*0.72,lwd=0,col=T_col,border=NA)
     text(x=length(plot_abs[[j]][,1])*0.75-1.2*length(plot_abs[[j]][,1]),
          y=c(abs_max*0.90),"A",cex=2)
     text(x=length(plot_abs[[j]][,1])*0.75-1.2*length(plot_abs[[j]][,1]),
@@ -1850,13 +1842,13 @@ plotCountsPerSampleRelativeVcf_plot<-function(directory2,samples,plot_rel,
         steps<-seq(0.7,2*0.65,by=(2*0.65-0.7)/length(A_col))-1.2*2
     }
     rect(xleft=steps[1:length(steps)-1],xright=steps[2:length(steps)],
-         ybottom=rel_max*0.88,ytop=rel_max*0.93,lwd=0,col=A_col)
+         ybottom=rel_max*0.88,ytop=rel_max*0.93,lwd=0,col=A_col,border=NA)
     rect(xleft=steps[1:length(steps)-1],xright=steps[2:length(steps)],
-         ybottom=rel_max*0.81,ytop=rel_max*0.86,lwd=0,col=C_col)
+         ybottom=rel_max*0.81,ytop=rel_max*0.86,lwd=0,col=C_col,border=NA)
     rect(xleft=steps[1:length(steps)-1],xright=steps[2:length(steps)],
-         ybottom=rel_max*0.74,ytop=rel_max*0.79,lwd=0,col=G_col)
+         ybottom=rel_max*0.74,ytop=rel_max*0.79,lwd=0,col=G_col,border=NA)
     rect(xleft=steps[1:length(steps)-1],xright=steps[2:length(steps)],
-         ybottom=rel_max*0.67,ytop=rel_max*0.72,lwd=0,col=T_col)
+         ybottom=rel_max*0.67,ytop=rel_max*0.72,lwd=0,col=T_col,border=NA)
     text(x=length(plot_rel[[j]][,1])*0.75-1.2*length(plot_rel[[j]][,1]),
          y=c(rel_max*0.90),"A",cex=2)
     text(x=length(plot_rel[[j]][,1])*0.75-1.2*length(plot_rel[[j]][,1]),
@@ -2197,13 +2189,13 @@ plotCountsPerTargetVcf_plot<-function(directory2,samples,plot_abs,plot_col,
         steps<-seq(0.7,2*0.65,by=(2*0.65-0.7)/length(A_col))-1.2*2
     }
     rect(xleft=steps[1:length(steps)-1],xright=steps[2:length(steps)],
-         ybottom=abs_max*0.88,ytop=abs_max*0.93,lwd=0,col=A_col)
+         ybottom=abs_max*0.88,ytop=abs_max*0.93,lwd=0,col=A_col,border=NA)
     rect(xleft=steps[1:length(steps)-1],xright=steps[2:length(steps)],
-         ybottom=abs_max*0.81,ytop=abs_max*0.86,lwd=0,col=C_col)
+         ybottom=abs_max*0.81,ytop=abs_max*0.86,lwd=0,col=C_col,border=NA)
     rect(xleft=steps[1:length(steps)-1],xright=steps[2:length(steps)],
-         ybottom=abs_max*0.74,ytop=abs_max*0.79,lwd=0,col=G_col)
+         ybottom=abs_max*0.74,ytop=abs_max*0.79,lwd=0,col=G_col,border=NA)
     rect(xleft=steps[1:length(steps)-1],xright=steps[2:length(steps)],
-         ybottom=abs_max*0.67,ytop=abs_max*0.72,lwd=0,col=T_col)
+         ybottom=abs_max*0.67,ytop=abs_max*0.72,lwd=0,col=T_col,border=NA)
     text(x=length(plot_abs[[j]][,1])*0.75-1.2*length(plot_abs[[j]][,1]),
          y=c(abs_max*0.90),"A",cex=2)
     text(x=length(plot_abs[[j]][,1])*0.75-1.2*length(plot_abs[[j]][,1]),
@@ -2506,13 +2498,13 @@ plotCountsPerTargetRelativeVcf_plot<-function(directory2,samples,plot_rel,
         steps<-seq(0.7,2*0.65,by=(2*0.65-0.7)/length(A_col))-1.2*2
     }
     rect(xleft=steps[1:length(steps)-1],xright=steps[2:length(steps)],
-         ybottom=rel_max*0.88,ytop=rel_max*0.93,lwd=0,col=A_col)
+         ybottom=rel_max*0.88,ytop=rel_max*0.93,lwd=0,col=A_col,border=NA)
     rect(xleft=steps[1:length(steps)-1],xright=steps[2:length(steps)],
-         ybottom=rel_max*0.81,ytop=rel_max*0.86,lwd=0,col=C_col)
+         ybottom=rel_max*0.81,ytop=rel_max*0.86,lwd=0,col=C_col,border=NA)
     rect(xleft=steps[1:length(steps)-1],xright=steps[2:length(steps)],
-         ybottom=rel_max*0.74,ytop=rel_max*0.79,lwd=0,col=G_col)
+         ybottom=rel_max*0.74,ytop=rel_max*0.79,lwd=0,col=G_col,border=NA)
     rect(xleft=steps[1:length(steps)-1],xright=steps[2:length(steps)],
-         ybottom=rel_max*0.67,ytop=rel_max*0.72,lwd=0,col=T_col)
+         ybottom=rel_max*0.67,ytop=rel_max*0.72,lwd=0,col=T_col,border=NA)
     text(x=length(plot_rel[[j]][,1])*0.75-1.2*length(plot_rel[[j]][,1]),
          y=c(rel_max*0.90),"A",cex=2)
     text(x=length(plot_rel[[j]][,1])*0.75-1.2*length(plot_rel[[j]][,1]),
@@ -2624,14 +2616,14 @@ plotCountsPerSample<-function(samples,
                 plot_abs[[j]]<-plotCountsPerSample_abs(calling,
                                                        frequency_weight,
                                                        long_insert,
-                                                       i,j,k)
+                                                       i,j,k,plot_abs[[j]])
                 plot_col[[j]]<-plotCountsPerSample_col(calling,
                                                        frequency_weight,
                                                        long_insert,
                                                        qual_lower_bound,
                                                        qual_upper_bound,
                                                        A_col,C_col,G_col,T_col,
-                                                       i,j,k)
+                                                       i,j,k,plot_col[[j]])
    
             }
             if(sum(plot_abs[[j]][i,1:5],na.rm=TRUE)>abs_max){
@@ -2642,7 +2634,7 @@ plotCountsPerSample<-function(samples,
                 plot_insert[[j]]<-plotCountsPerSample_insert(calling,
                                                              frequency_weight,
                                                              long_insert,
-                                                             i,j,k)
+                                                             i,j,k,plot_insert[[j]])
                 plot_col_insert[[j]]<-plotCountsPerSample_col(calling,
                                                               frequency_weight,
                                                               long_insert,
@@ -2650,7 +2642,7 @@ plotCountsPerSample<-function(samples,
                                                               qual_upper_bound,
                                                               A_col,C_col,
                                                               G_col,T_col,
-                                                              i,j,k)
+                                                              i,j,k,plot_col_insert[[j]])
             }
             
             plot_insert[[j]][i,2]<-sum(plot_insert[[j]][i,1],plot_insert[[j]][i,2])
@@ -2668,7 +2660,7 @@ plotCountsPerSample<-function(samples,
             plot_ref[[j]]<-plotCountsPerSample_ref(calling,
                                                    dbsnp_file,
                                                    vcf.comp,
-                                                   j,i)  
+                                                   j,i,plot_ref[[j]])  
         }
     }
     if(abs_max==0){
@@ -2745,14 +2737,15 @@ plotCountsPerSampleRelative<-function(samples,
                                                                qual_upper_bound,
                                                                A_col,C_col,
                                                                G_col,T_col,
-                                                               i,j,k)   
+                                                               i,j,k,plot_col[[j]])   
             }
             
             for(k in c(1,3,5,7)){
                 plot_insert[[j]]<-plotCountsPerSampleRelative_insert(calling,
                                                                      frequency_weight,
                                                                      long_insert,
-                                                                     i,j,k)
+                                                                     i,j,k,
+                                                                     plot_insert[[j]])
                 plot_col_insert[[j]]<-plotCountsPerSampleRelative_col(calling,
                                                                       frequency_weight,
                                                                       long_insert,
@@ -2760,7 +2753,8 @@ plotCountsPerSampleRelative<-function(samples,
                                                                       qual_upper_bound,
                                                                       A_col,C_col,
                                                                       G_col,T_col,
-                                                                      i,j,k)
+                                                                      i,j,k,
+                                                                      plot_col_insert[[j]])
             }
             plot_insert[[j]][i,2]<-sum(plot_insert[[j]][i,1],plot_insert[[j]][i,2])
             plot_insert[[j]][i,3]<-sum(plot_insert[[j]][i,2],plot_insert[[j]][i,3])
@@ -2777,7 +2771,7 @@ plotCountsPerSampleRelative<-function(samples,
             plot_ref[[j]]<-plotCountsPerSample_ref(calling,
                                                    dbsnp_file,
                                                    vcf.comp,
-                                                   j,i)  
+                                                   j,i,plot_ref[[j]])  
         }
     }
     
@@ -2844,14 +2838,14 @@ plotCountsPerTarget<-function(samples,
                 plot_abs[[j]]<-plotCountsPerTarget_abs(samples,
                                                        frequency_weight,
                                                        long_insert,
-                                                       i,j,k)
+                                                       i,j,k,plot_abs[[j]])
                 plot_col[[j]]<-plotCountsPerTarget_col(samples,
                                                        frequency_weight,
                                                        long_insert,
                                                        qual_lower_bound,
                                                        qual_upper_bound,
                                                        A_col,C_col,G_col,T_col,
-                                                       i,j,k)
+                                                       i,j,k,plot_col[[j]])
             }
             if(sum(plot_abs[[j]][i,1:5],na.rm=TRUE)>abs_max){
                 abs_max<-sum(plot_abs[[j]][i,1:5],na.rm=TRUE)
@@ -2860,7 +2854,7 @@ plotCountsPerTarget<-function(samples,
                 plot_insert[[j]]<-plotCountsPerTarget_insert(samples,
                                                              frequency_weight,
                                                              long_insert,
-                                                             i,j,k)
+                                                             i,j,k,plot_insert[[j]])
                 plot_col_insert[[j]]<-plotCountsPerTarget_col_insert(samples,
                                                                      frequency_weight,
                                                                      long_insert,
@@ -2868,7 +2862,8 @@ plotCountsPerTarget<-function(samples,
                                                                      qual_upper_bound,
                                                                      A_col,C_col,
                                                                      G_col,T_col,
-                                                                     i,j,k)
+                                                                     i,j,k,
+                                                                     plot_col_insert[[j]])
             }
             plot_insert[[j]][i,2]<-sum(plot_insert[[j]][i,1],plot_insert[[j]][i,2])
             plot_insert[[j]][i,3]<-sum(plot_insert[[j]][i,2],plot_insert[[j]][i,3])
@@ -2886,7 +2881,7 @@ plotCountsPerTarget<-function(samples,
                                                    calling,
                                                    dbsnp_file,
                                                    vcf.comp,
-                                                   j,i)
+                                                   j,i,plot_ref[[j]])
          }
     }
     if(abs_max==0){
@@ -2967,13 +2962,14 @@ plotCountsPerTargetRelative<-function(samples,
                                                                qual_upper_bound,
                                                                A_col,C_col,
                                                                G_col,T_col,
-                                                               i,j,k)    
+                                                               i,j,k,plot_col[[j]])    
             }            
             for(k in c(1,3,5,7)){
                 plot_insert[[j]]<-plotCountsPerTargetRelative_insert(samples,
                                                                      frequency_weight,
                                                                      long_insert,
-                                                                     i,j,k)
+                                                                     i,j,k,
+                                                                     plot_insert[[j]])
                 plot_col_insert[[j]]<-plotCountsPerTargetRelative_col_insert(samples,
                                                                              frequency_weight,
                                                                              long_insert,
@@ -2981,7 +2977,8 @@ plotCountsPerTargetRelative<-function(samples,
                                                                              qual_upper_bound,
                                                                              A_col,C_col,
                                                                              G_col,T_col,
-                                                                             i,j,k) 
+                                                                             i,j,k,
+                                                                             plot_col_insert[[j]]) 
             }
             plot_insert[[j]][i,2]<-sum(plot_insert[[j]][i,1],plot_insert[[j]][i,2])
             plot_insert[[j]][i,3]<-sum(plot_insert[[j]][i,2],plot_insert[[j]][i,3])
@@ -2999,7 +2996,7 @@ plotCountsPerTargetRelative<-function(samples,
                                                    calling,
                                                    dbsnp_file,
                                                    vcf.comp,
-                                                   j,i)  
+                                                   j,i,plot_ref[[j]])  
         }
     }
     counter2<-0
@@ -3071,14 +3068,14 @@ plotCountsPerSampleVcf<-function(samples,
                 plot_abs[[j]]<-plotCountsPerSample_abs(calling,
                                                        frequency_weight,
                                                        long_insert,
-                                                       i,j,k)
+                                                       i,j,k,plot_abs[[j]])
                 plot_col[[j]]<-plotCountsPerSample_col(calling,
                                                        frequency_weight,
                                                        long_insert,
                                                        qual_lower_bound,
                                                        qual_upper_bound,
                                                        A_col,C_col,G_col,T_col,
-                                                       i,j,k)   
+                                                       i,j,k,plot_col[[j]])   
             }
             if(sum(plot_abs[[j]][i,1:5],na.rm=TRUE)>abs_max){
                 abs_max<-sum(plot_abs[[j]][i,1:5],na.rm=TRUE)
@@ -3088,7 +3085,7 @@ plotCountsPerSampleVcf<-function(samples,
                 plot_insert[[j]]<-plotCountsPerSample_insert(calling,
                                                              frequency_weight,
                                                              long_insert,
-                                                             i,j,k)
+                                                             i,j,k,plot_insert[[j]])
                 plot_col_insert[[j]]<-plotCountsPerSample_col_insert(calling,
                                                                      frequency_weight,
                                                                      long_insert,
@@ -3096,7 +3093,8 @@ plotCountsPerSampleVcf<-function(samples,
                                                                      qual_upper_bound,
                                                                      A_col,C_col,
                                                                      G_col,T_col,
-                                                                     i,j,k) 
+                                                                     i,j,k,
+                                                                     plot_col_insert[[j]]) 
             }
             plot_insert[[j]][i,2]<-sum(plot_insert[[j]][i,1],plot_insert[[j]][i,2])
             plot_insert[[j]][i,3]<-sum(plot_insert[[j]][i,2],plot_insert[[j]][i,3])
@@ -3113,7 +3111,7 @@ plotCountsPerSampleVcf<-function(samples,
             plot_ref<-plotCountsPerSample_ref(calling,
                                               dbsnp_file,
                                               vcf.comp,
-                                              j,i)
+                                              j,i,plot_ref[[j]])
             
         }
     }
@@ -3191,13 +3189,14 @@ plotCountsPerSampleRelativeVcf<-function(samples,
                                                           qual_upper_bound,
                                                           A_col,C_col,
                                                           G_col,T_col,
-                                                          i,j,k)
+                                                          i,j,k,plot_col[[j]])
             }
             for(k in c(1,3,5,7)){
                 plot_insert[[j]]<-plotCountsPerSampleRelative_insert(calling,
                                                                      frequency_weight,
                                                                      long_insert,
-                                                                     i,j,k)
+                                                                     i,j,k,
+                                                                     plot_insert[[j]])
                 plot_col_insert[[j]]<-plotCountsPerSampleRelative_col_insert(calling,
                                                                              frequency_weight,
                                                                              long_insert,
@@ -3205,7 +3204,8 @@ plotCountsPerSampleRelativeVcf<-function(samples,
                                                                              qual_upper_bound,
                                                                              A_col,C_col,
                                                                              G_col,T_col,
-                                                                             i,j,k)
+                                                                             i,j,k,
+                                                                             plot_col_insert[[j]])
             }
             plot_insert[[j]][i,2]<-sum(plot_insert[[j]][i,1],plot_insert[[j]][i,2])
             plot_insert[[j]][i,3]<-sum(plot_insert[[j]][i,2],plot_insert[[j]][i,3])
@@ -3219,7 +3219,8 @@ plotCountsPerSampleRelativeVcf<-function(samples,
                                      samples=character(),which=GRanges(seqnames=chr,ranges=IRanges(pos,pos)))
                 vcf.comp<-readVcf(dbsnp_file,"hg19",param=param)
             }
-            plot_ref[[j]]<-plotCountsPerSample_ref(calling,dbsnp_file,vcf.comp,j,i)
+            plot_ref[[j]]<-plotCountsPerSample_ref(calling,dbsnp_file,vcf.comp,j,i,
+                                                   plot_ref[[j]])
         }
     }
     for(j in 1:length(plot_rel)){
@@ -3285,14 +3286,14 @@ plotCountsPerTargetVcf<-function(samples,
                 plot_abs[[j]]<-plotCountsPerTarget_abs(samples,
                                                        frequency_weight,
                                                        long_insert,
-                                                       i,j,k)
+                                                       i,j,k,plot_abs[[j]])
                 plot_col[[j]]<-plotCountsPerTarget_col(samples,
                                                        frequency_weight,
                                                        long_insert,
                                                        qual_lower_bound,
                                                        qual_upper_bound,
                                                        A_col,C_col,G_col,T_col,
-                                                       i,j,k)  
+                                                       i,j,k,plot_col[[j]])  
             }
             if(sum(plot_abs[[j]][i,1:5],na.rm=TRUE)>abs_max){
                 abs_max<-sum(plot_abs[[j]][i,1:5],na.rm=TRUE)
@@ -3301,7 +3302,7 @@ plotCountsPerTargetVcf<-function(samples,
                 plot_insert[[j]]<-plotCountsPerTarget_insert(samples,
                                                              frequency_weight,
                                                              long_insert,
-                                                             i,j,k)
+                                                             i,j,k,plot_insert[[j]])
                 plot_col_insert[[j]]<-plotCountsPerTarget_col_insert(samples,
                                                                      frequency_weight,
                                                                      long_insert,
@@ -3309,7 +3310,8 @@ plotCountsPerTargetVcf<-function(samples,
                                                                      qual_upper_bound,
                                                                      A_col,C_col,
                                                                      G_col,T_col,
-                                                                     i,j,k)
+                                                                     i,j,k,
+                                                                     plot_col_insert[[j]])
             }
             plot_insert[[j]][i,2]<-sum(plot_insert[[j]][i,1],plot_insert[[j]][i,2])
             plot_insert[[j]][i,3]<-sum(plot_insert[[j]][i,2],plot_insert[[j]][i,3])
@@ -3324,7 +3326,8 @@ plotCountsPerTargetVcf<-function(samples,
                 vcf.comp<-readVcf(dbsnp_file,"hg19",param=param)
             }
             plot_ref[[j]]<-plotCountsPerTarget_ref(samples,calling,
-                                                   dbsnp_file,vcf.comp,j,i)
+                                                   dbsnp_file,vcf.comp,j,i,
+                                                   plot_ref[[j]])
         }
     }
     if(abs_max==0){
@@ -3402,13 +3405,14 @@ plotCountsPerTargetRelativeVcf<-function(samples,
                                                                qual_upper_bound,
                                                                A_col,C_col,
                                                                G_col,T_col,
-                                                               i,j,k) 
+                                                               i,j,k,plot_col[[j]]) 
             }
             for(k in c(1,3,5,7)){
                 plot_insert[[j]]<-plotCountsPerTargetRelative_insert(samples,
                                                                      frequency_weight,
                                                                      long_insert,
-                                                                     i,j,k)
+                                                                     i,j,k,
+                                                                     plot_col[[j]])
                 plot_col_insert[[j]]<-plotCountsPerTargetRelative_col_insert(samples,
                                                                              frequency_weight,
                                                                              long_insert,
@@ -3416,7 +3420,8 @@ plotCountsPerTargetRelativeVcf<-function(samples,
                                                                              qual_upper_bound,
                                                                              A_col,C_col,
                                                                              G_col,T_col,
-                                                                             i,j,k) 
+                                                                             i,j,k,
+                                                                             plot_col_insert[[j]]) 
             }
             plot_insert[[j]][i,2]<-sum(plot_insert[[j]][i,1],plot_insert[[j]][i,2])
             plot_insert[[j]][i,3]<-sum(plot_insert[[j]][i,2],plot_insert[[j]][i,3])
@@ -3431,7 +3436,8 @@ plotCountsPerTargetRelativeVcf<-function(samples,
                 vcf.comp<-readVcf(dbsnp_file,"hg19",param=param)
             }
             plot_ref[[j]]<-plotCountsPerTarget_ref(samples,calling,
-                                                   dbsnp_file,vcf.comp,j,i) 
+                                                   dbsnp_file,vcf.comp,j,i,
+                                                   plot_ref[[j]]) 
         }
     }
     counter2<-0

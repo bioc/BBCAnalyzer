@@ -2,8 +2,8 @@ Package: BBCAnalyzer
 Type: Package
 Title: BBCAnalyzer: an R/Bioconductor package for visualizing base
         counts
-Version: 1.1.1
-Date: 2015-07-20
+Version: 1.1.2
+Date: 2016-01-26
 Author: Sarah Sandmann
 Maintainer: Sarah Sandmann <sarah.sandmann@uni-muenster.de>
 Description: BBCAnalyzer is a package for visualizing the relative or
@@ -14,7 +14,7 @@ Description: BBCAnalyzer is a package for visualizing the relative or
         mutations or polymorphisms and variants called in the data may
         additionally be included in the plots.
 License: LGPL-3
-Imports: SummarizedExperiment, VariantAnnotation, Rsamtools
+Imports: SummarizedExperiment, VariantAnnotation, Rsamtools, grDevices
 Suggests: BSgenome.Hsapiens.UCSC.hg19
 biocViews: Sequencing, Alignment, Coverage, GeneticVariability, SNP
 NeedsCompilation: no

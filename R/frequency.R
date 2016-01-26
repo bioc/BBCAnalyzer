@@ -299,11 +299,11 @@ frequencyAnalysisVcf<-function(samples,
                         }
                     }
                     #insert
-                    if(nchar(as.character(vcf[k,5]))>1
-                       &&vcountPattern(",",as.character(vcf[k,5]))==0
-                       ||vcountPattern(",",as.character(vcf[k,5]))==1
-                       &&nchar(strsplit(as.character(vcf[k,4]),split=",")[[1]][1])>1
-                       &&nchar(strsplit(as.character(vcf[k,4]),split=",")[[1]][2])>1){
+                    if((nchar(as.character(vcf[k,5]))>1
+                       &&vcountPattern(",",as.character(vcf[k,5]))==0)
+                       ||(vcountPattern(",",as.character(vcf[k,5]))==1
+                       &&nchar(strsplit(as.character(vcf[k,5]),split=",")[[1]][1])>1
+                       &&nchar(strsplit(as.character(vcf[k,5]),split=",")[[1]][2])>1)){
                         ins<-TRUE
                         if(vcountPattern(",",as.character(vcf[k,5]))==1){
                             ins_length[1]<-nchar(as.character(vcf[k,5]))-nchar(strsplit(as.character(vcf[k,4]),split=",")[[1]][1])
