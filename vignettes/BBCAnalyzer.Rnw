@@ -15,21 +15,19 @@
 \usepackage{booktabs}
 \usepackage{xr}
 \usepackage{pdflscape}
+\usepackage{Sweave}
 %\VignetteIndexEntry{Using BBCAnalyzer}
+
+<<echo=FALSE>>=
+options(width=100)
+@
+
+\title{BBCAnalyzer -- an R/Bioconductor package for visualizing base counts}
+\author{Sarah Sandmann}
+
 \begin{document}
 \SweaveOpts{concordance=TRUE}
-\begin{center}
-\large BBCAnalyzer
-
-an R/Bioconductor package for visualizing base counts
-\bigskip
-
-\normalsize
-Sarah Sandmann
-
-June 10th, 2015
-\end{center}
-\bigskip
+\maketitle
 
 \tableofcontents
 
@@ -61,13 +59,16 @@ may equally be included into the plots.
 The package can be downloaded and installed with
 \medskip
 
-\texttt{$>$ biocLite("BBCAnalyzer")}.
-
+<<3installing,eval=FALSE>>=
+biocLite("BBCAnalyzer")
+@
 
 After installation, the package can be loaded into R by typing
 \medskip
 
-\texttt{$>$ library(BBCAnalyzer)}
+<<4loading>>=
+library(BBCAnalyzer)
+@
 \medskip
 
 into the R console.
@@ -86,12 +87,13 @@ For the correct functioning of \emph{BBCAnalyzer} in the first place, various in
 \end{itemize}
 \medskip
 
-\noindent Example file \emph{SampleNames.txt}:
-\begin{lstlisting}
-Example_IonTorrent
-Example_454
-\end{lstlisting}
-\medskip
+\noindent Examplary object \emph{samples}:
+
+<<5>>=
+sample_file <- system.file("extdata", "SampleNames.txt", package = "BBCAnalyzer")
+samples <- read.table(sample_file)
+samples
+@
 
 \begin{itemize}
 \item The bam- and the corresponding bai files of the samples to be analyzed have to be provided in a folder. The names of the files have to match the names provided by the sample names file.
@@ -106,17 +108,12 @@ Example_454
 \end{itemize}
 \medskip
 
-\noindent Example file \emph{targetRegions.txt}:
-\begin{lstlisting}
-4   106157698
-20  31024054
-21	36206893
-2	25469913
-21	44514970
-7	148543694
-7	148543695
-\end{lstlisting}
-\bigskip
+\noindent Examplary object \emph{targetRegions}:
+<<6>>=
+target_file <- system.file("extdata", "targetRegions.txt", package = "BBCAnalyzer")
+targetRegions <- read.table(target_file)
+targetRegions
+@
 
 \noindent Additionally to the necessary input, optional input may be defined:
 
@@ -126,30 +123,11 @@ Example_454
 \medskip
 
 \noindent Selected parts of the file \emph{Example\_IonTorrent.vcf}:
-\begin{lstlisting}
-2	25469913	rs2276599	C	T	376.77	DP=38;	
-GT:AD:DP:GQ:PL	0/1:18,20:38:99:405,0,340
-4	106157698	.	T	C	1519.77	DP=216;
-GT:AD:DP:GQ:PL	0/1:125,91:216:99:1548,0,2554
-21	44514969	.	A	ATG	1961.73	DP=190;
-GT:AD:DP:GQ:PL	0/1:84,92:176:99:1999,0,1942
-\end{lstlisting}
-\medskip 
-
-\noindent Selected parts of the file \emph{Example\_454.vcf}:
-\begin{lstlisting}
-2	25469913	rs2276599	C	T	964.77	DP=60;
-GT:AD:DP:GQ:PL	0/1:24,35:59:99:993,0,590
-4	106157698	.	T	C	3066.77	DP=425;
-GT:AD:DP:GQ:PL	0/1:251,143:394:99:3095,0,7734
-7	148543693	.	TAA	T,TA	2517.73	DP=127;
-GT:AD:DP:GQ:PL	1/2:4,94,28:126:99:2555,374,232,1047,0,788
-20	31024054	.	A	G	244.77	DP=96;
-GT:AD:DP:GQ:PL	0/1:74,22:96:99:273,0,1940
-21	36206893	.	G	A	162.77	DP=249;
-GT:AD:DP:GQ:PL	0/1:214,34:248:99:191,0,5561
-\end{lstlisting}
-\medskip
+<<7>>=
+vcf_file <- system.file("extdata", "Example_IonTorrent.vcf", package = "BBCAnalyzer")
+vcf_IT <- read.table(vcf_file)
+vcf_IT
+@
 
 \begin{itemize}
 \item A tabix file containing e.g. known polymorphisms or mutations (dbSNP \cite{dbsnp}) may be provided.
@@ -202,165 +180,69 @@ The analysis of the bases, which actually only serves as a preparation for the f
 A list of lists is returned containing all the information that is generated in this analysis step. The list with the bases ($[$Sample$]$.bases.txt) is available as the first element of the list. The corresponding qualities ($[$Sample$]$.qualities.txt) are available as the second element of the list. The summed up number of bases ($[$Sample$]$.frequency.txt) are available as the third element of the list. The calculated relative frequencies and the potential calls ($[$Sample$]$.calling.txt) are available as the fourth element.
 \bigskip
 
-\noindent First lines of the output file \emph{Example\_IonTorrent.bases.txt} (/first list of the first list):
-\begin{lstlisting}
-4;106157698	20;31024054	21;36206893	2;25469913	
-21;44514970	21;44514970.1	7;148543694	7;148543695
-C	A	G	T	T	T	A	A
-T	A	G	C	T	T	A	A
-T	A	G	C	T	T	A	A
-T	A	A	C	T	T	A	A
-T	A	G	C	I, T	I, G	A	A
-T	A	G	C	T	T	A	A
-T	A	G	T	T	T	A	A
-C	A	G	T	T	T	A	A
-T	A	G	T	T	T	A	A
-T	A	G	C	I, T	I, G	A	A
-\end{lstlisting}
+<<8>>=
+#Example1
+library("BSgenome.Hsapiens.UCSC.hg19")
+ref_genome<-BSgenome.Hsapiens.UCSC.hg19
 
-\noindent First lines of the output file \emph{Example\_IonTorrent.quality.txt} (/first list of the second list):
-\begin{lstlisting}
-4;106157698	20;31024054	21;36206893	2;25469913	
-21;44514970	21;44514970.1	7;148543694	7;148543695
-66	66	66	66	66	66	66	66
-66	66	66	66	66	66	66	66
-66	66	66	66	66	66	66	66
-66	66	66	66	66	66	66	66
-66	66	66	66	66	66	66	66
-66	66	66	66	66	66	66	66
-66	66	66	66	66	66	66	66
-66	66	66	66	66	66	66	66
-66	66	66	66	66	66	66	66
-66	66	66	66	66	66	66	66
-\end{lstlisting}
+output1<-analyzeBases(sample_names=sample_file,
+            bam_input=system.file("extdata",package="BBCAnalyzer"),
+            target_regions=target_file,
+            vcf_input="",
+            output=system.file("extdata",package="BBCAnalyzer"),
+            output_pictures="",
+            known_file=system.file("extdata","dbsnp_138.part.vcf.gz",package="BBCAnalyzer"),
+            genome=ref_genome,
+            MQ_threshold=60,
+            BQ_threshold=50,
+            frequency_threshold=0.01,
+            qual_lower_bound=58,
+            qual_upper_bound=63,
+            marks=c(0.01),
+            relative=TRUE,
+            per_sample=TRUE)
+@
 
-\noindent First lines of the output file \emph{Example\_454.bases.txt} (/second list of the first list):
-\begin{lstlisting}
-4;106157698	20;31024054	21;36206893	2;25469913	
-21;44514970	7;148543694	7;148543695
-T	A	G	T	NotCovered	D	D
-T	G	G	T	NA	D	A
-C	G	G	C	NA	D	A
-T	G	G	C	NA	D	D
-C	A	G	C	NA	D	D
-T	G	G	C	NA	D	D
-C	A	G	C	NA	D	A
-T	G	G	C	NA	D	D
-T	A	G	C	NA	D	A
-T	A	G	C	NA	D	A
-\end{lstlisting}
+\noindent First lines of the output file \emph{Example\_IonTorrent.bases.txt}
+<<9>>=
+head(output1[[1]][[1]])
+@
 
-\noindent First lines of the output file \emph{Example\_454.quality.txt} (/second list of the second list):
-\begin{lstlisting}
-4;106157698	20;31024054	21;36206893	2;25469913	
-21;44514970	7;148543694	7;148543695
-66	59	66	66	NotCovered	-1	-1
-66	58	66	66	NA	-1	66
-66	58	66	66	NA	-1	66
-66	58	66	66	NA	-1	-1
-66	56	66	66	NA	-1	-1
-66	58	66	66	NA	-1	-1
-66	58	66	66	NA	-1	66
-66	54	66	66	NA	-1	-1
-66	59	66	66	NA	-1	66
-66	59	66	66	NA	-1	66
-\end{lstlisting}
+\noindent First lines of the output file \emph{Example\_IonTorrent.quality.txt}
+<<9>>=
+head(output1[[2]][[1]])
+@
 
-\begin{landscape}
-\noindent Output file \emph{Example\_IonTorrent.frequency.txt} (mean qualities reduced to three decimal places) (/first list of the third list):
-\begin{lstlisting}
-chr	pos	ref	a	a_qual	c	c_qual	g	g_qual	t	t_qual	Del	Ins	
-Ins_a	Ins_a_qual	Ins_c	Ins_c_qual	Ins_g	Ins_g_qual	Ins_t	Ins_t_qual	excluded
-chr4	106157698	T	NA	NA	128	61	NA	NA	164	61.25	2	NA	
-NA	NA	NA	NA	NA	NA	NA	NA	50
-chr20	31024054	A	760	60.496	NA	NA	NA	NA	NA	NA	NA	NA	
-NA	NA	NA	NA	NA	NA	NA	NA	25
-chr21	36206893	G	50	64.24	NA	NA	282	62.982NA	NA	NA	NA	
-NA	NA	NA	NA	NA	NA	NA	NA	32
-chr2	25469913	C	NA	NA	274	64.818	NA	NA	83	64.301	NA	NA	
-NA	NA	NA	NA	NA	NA	NA	NA	18
-chr21	44514970	T	NA	NA	NA	NA	NA	NA	268	62.149	1	122	
-NA	NA	NA	NA	NA	NA	122	62.377	48
-chr21	44514970	T	NA	NA	NA	NA	121	61.669	61.959	1	121	
-NA	NA	NA	NA	121	61.669	NA	NA	49
-chr7	148543694	A	303	64.419	1	58	NA	NA	3	55.333	26	1	
-NA	NA	1	58	NA	NA	NA	NA	55
-chr7	148543695	A	331	63.912	NA	NA	NA	NA	NA	NA	7	NA	
-NA	NA	NA	NA	NA	NA	NA	NA	49
-\end{lstlisting}
-\end{landscape}
+\noindent First lines of the output file \emph{Example\_454.bases.txt}
+<<9>>=
+head(output1[[1]][[2]])
+@
 
-\begin{landscape}
-\noindent Output file \emph{Example\_IonTorrent.frequency.txt} (mean qualities reduced to three decimal places) (/second list of the third list):
-\begin{lstlisting}
-chr	pos	ref	a	a_qual	c	c_qual	g	g_qual	t	t_qual	Del	Ins	
-Ins_a	Ins_a_qual	Ins_c	Ins_c_qual	Ins_g	Ins_g_qual	Ins_t	Ins_t_qual	excluded
-chr4	106157698	T	NA	NA	383	60.687	NA	NA	580	61.445	NA	18	
-NA	NA	18	56.278	NA	NA	NA	NA	70
-chr20	31024054	A	181	63.105	NA	NA	70	63.2	NA	NA	NA	NA	
-NA	NA	NA	NA	NA	NA	NA	NA	NA
-chr21	36206893	G	121	62.785	NA	NA	646	58.661	NA	NA	22	NA	
-NA	NA	NA	NA	NA	NA	NA	NA	NA
-chr2	25469913	C	NA	NA	109	64.450	NA	NA	115	64.687	NA	NA	
-NA	NA	NA	NA	NA	NA	NA	NA	1
-chr21	44514970	T	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	
-NA	NA	NA	NA	NA	NA	NA	NA	NA
-chr7	148543694	A	16	58.4375	NA	NA	NA	NA	NA	NA	439	1	
-1	53	NA	NA	NA	NA	NA	NA	NA
-chr7	148543695	A	123	58.561	NA	NA	NA	NA	NA	NA	332	NA	
-NA	NA	NA	NA	NA	NA	NA	NA	NA
-\end{lstlisting}
-\end{landscape}
-\newpage
+\noindent First lines of the output file \emph{Example\_454.quality.txt}
+<<9>>=
+head(output1[[2]][[2]])
+@
 
-\begin{landscape}
-\noindent Output file \emph{Example\_IonTorrent.calling.txt} (mean qualities reduced to three decimal places) (/first list of the fourth list):
-\begin{lstlisting}
-chr	pos	ref	a_freq	c_freq	g_freq	t_freq	del_freq	ins_freq	call1	call2	
-call3	call4	call5	call6
-chr4	106157698	T	NA	0.435	NA	0.558	0.007	NA	T	C	
-NA	NA	NA	NA
-chr20	31024054	A	1	NA	NA	NA	NA	NA	A	NA	
-NA	NA	NA	NA
-chr21	36206893	G	0.151	NA	0.850	NA	NA	NA	G	A	
-NA	NA	NA	NA
-chr2	25469913	C	NA	0.768	NA	0.232	NA	NA	C	T	
-NA	NA	NA	NA
-chr21	44514970	T	NA	NA	NA	0.996	0.004	0.454	T	Ins	
-NA	NA	NA	NA
-chr21	44514970	T	NA	NA	0.451	0.545	0.004	0.451	T	G	
-Ins	NA	NA	NA
-chr7	148543694	A	0.910	0.003	NA	0.009	0.078	0.003	A	Del	
-NA	NA	NA	NA
-chr7	148543695	A	0.979	NA	NA	NA	0.021	NA	A	Del	
-NA	NA	NA	NA
-\end{lstlisting}
-\end{landscape}
-\newpage
+\noindent First lines of the output file \emph{Example\_IonTorrent.frequency.txt}
+<<9>>=
+head(output1[[3]][[1]])
+@
 
-\begin{landscape}
-\noindent Output file \emph{Example\_454.calling.txt} (mean qualities reduced to three decimal places) (/second list of the fourth list):
-\begin{lstlisting}
-chr	pos	ref	a_freq	c_freq	g_freq	t_freq	del_freq	ins_freq	call1	call2	
-call3	call4	call5	call6
-chr4	106157698	T	NA	0.398	NA	0.6023	NA	0.019	T	C	
-Ins	NA	NA	NA
-chr20	31024054	A	0.721	NA	0.279	NA	NA	NA	A	G	
-NA	NA	NA	NA
-chr21	36206893	G	0.153	NA	0.819	NA	0.028	NA	G	A	
-Del	NA	NA	NA
-chr2	25469913	C	NA	0.487	NA	0.513	NA	NA	T	C	
-NA	NA	NA	NA
-chr21	44514970	T	NA	NA	NA	NA	NA	NA	NA	NA	
-NA	NA	NA	NA
-chr21	44514970	T	NA	NA	NA	NA	NA	NA	NA	NA	
-NA	NA	NA	NA
-chr7	148543694	A	0.035	NA	NA	NA	0.965	0.002	Del	A	
-NA	NA	NA	NA
-chr7	148543695	A	0.270	NA	NA	NA	0.730	NA	Del	A	
-NA	NA	NA	NA
-\end{lstlisting}
-\end{landscape}
+\noindent First lines of the output file \emph{Example\_454.frequency.txt}
+<<9>>=
+head(output1[[3]][[2]])
+@
+
+\noindent First lines of the output file \emph{Example\_IonTorrent.calling.txt}
+<<9>>=
+head(output1[[4]][[1]])
+@
+
+\noindent First lines of the output file \emph{Example\_454.calling.txt}
+<<9>>=
+head(output1[[4]][[2]])
+@
+
 
 \subsection{Visualizing the results}
 The function -- which may be called separately as well using the function \texttt{analyzeBasesPlotOnly} -- provides different possibilities for visualizing the results:
@@ -386,39 +268,8 @@ The function -- which may be called separately as well using the function \textt
 \end{itemize}
 \bigskip
 
-Exemplary call:
+Exemple: No vcf files, use known polymorphisms (dbSNP), mark 1\% threshold, plot relative frequencies, plot per sample
 
-\begin{lstlisting}
-##Example 1:
-#No vcf files, use known polymorphisms (dbSNP), mark 1% 
-threshold, plot relative frequencies, plot per sample.
-\end{lstlisting}
-
-<<Example1>>=
-library("BSgenome.Hsapiens.UCSC.hg19")
-ref_genome<-BSgenome.Hsapiens.UCSC.hg19
-library("BBCAnalyzer")
-
-output<-analyzeBases(sample_names=system.file("extdata","SampleNames.txt",package="BBCAnalyzer"),
-            bam_input=system.file("extdata",package="BBCAnalyzer"),
-            target_regions=system.file("extdata","targetRegions.txt",package="BBCAnalyzer"),
-            vcf_input="",
-            output=system.file("extdata",package="BBCAnalyzer"),
-            output_pictures=system.file("extdata",package="BBCAnalyzer"),
-            known_file=system.file("extdata","dbsnp_138.part.vcf.gz",package="BBCAnalyzer"),
-            genome=ref_genome,
-            MQ_threshold=60,
-            BQ_threshold=50,
-            frequency_threshold=0.01,
-            qual_lower_bound=58,
-            qual_upper_bound=63,
-            marks=c(0.01),
-            relative=TRUE,
-            per_sample=TRUE)
-@
-\bigskip
-
-Exemplary output:
 \begin{figure}[ht!]
 \includegraphics[width=15cm]{./Example_IonTorrent.png}
 \caption{Output file Example\_IonTorrent.png: Validated SNV at chr4;106157698 (only little number of deleted bases), reference base at chr20;31024054, possible SNV at chr21;36206893, known SNP at chr2;25469913; inserted TG at chr21;44514970, possible deletion at chr7;148543694, possible deletion at chr7;148543695; marked 1\% threshold.}
@@ -430,40 +281,20 @@ Exemplary output:
 \end{figure}
 \newpage
 
-Exemplary call:
+Exemple: Use vcf files, use known polymorphisms (dbSNP), mark 20\%, 40\%, 60\%, 80\% and 100\%, plot number of reads, plot per target.
 
-\begin{lstlisting}
-##Example 2:
-#Use vcf files, use known polymorphisms (dbSNP), mark 20%
-, 40%, 60%, 80% and 100%, plot number of reads, plot 
-per target.
-\end{lstlisting}
-
-<<Example2>>=
-library("BSgenome.Hsapiens.UCSC.hg19")
-ref_genome<-BSgenome.Hsapiens.UCSC.hg19
-library("BBCAnalyzer")
-
-output<-analyzeBases(sample_names=system.file("extdata","SampleNames.txt",package="BBCAnalyzer"),
-            bam_input=system.file("extdata",package="BBCAnalyzer"),
-            target_regions=system.file("extdata","targetRegions2.txt",package="BBCAnalyzer"),
+<<Example2, eval=FALSE>>=
+analyzeBasesPlotOnly(sample_names=sample_file,
             vcf_input=system.file("extdata",package="BBCAnalyzer"),
-            output=system.file("extdata",package="BBCAnalyzer"),
-            output_pictures=system.file("extdata",package="BBCAnalyzer"),
+            output="",
             known_file=system.file("extdata","dbsnp_138.part.vcf.gz",package="BBCAnalyzer"),            
-            genome=ref_genome,
-            MQ_threshold=60,
-            BQ_threshold=50,
-            frequency_threshold=0.01,
+            output_list=output_list,
             qual_lower_bound=58,
             qual_upper_bound=63,
             marks=c(0.2,0.4,0.6,0.8,1),
             relative=FALSE,
             per_sample=FALSE)
 @
-
-
-Exemplary output:
 
 \begin{figure}[ht!]
 \includegraphics[width=15cm]{./chr21;36206893.png}
@@ -512,11 +343,7 @@ Exemplary call:
 mark 1% threshold, plot relative frequencies, plot per sample.
 \end{lstlisting}
 
-<<Example3>>=
-library("BSgenome.Hsapiens.UCSC.hg19")
-ref_genome<-BSgenome.Hsapiens.UCSC.hg19
-library("BBCAnalyzer")
-
+<<Example3,eval=FALSE>>=
 output<-analyzeBases(
             sample_names=system.file("extdata","SampleNames_small.txt",package="BBCAnalyzer"),
             bam_input=system.file("extdata",package="BBCAnalyzer"),

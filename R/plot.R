@@ -260,7 +260,7 @@ plotCountsPerSample_plot<-function(directory2,samples,plot_abs,plot_col,abs_max,
                                    C_col,G_col,T_col,plot_ref,marks,
                                    qual_lower_bound,qual_upper_bound,j){
     if(directory2!=""){
-        png(file=paste(directory2,"/",samples[j,1],".png",sep=""),width=1600,height=800)
+        png(filename=paste(directory2,"/",samples[j,1],".png",sep=""),width=1600,height=800)
     }
     par(mar=c(16,6,2,1)) 
     barplot(t(plot_abs[[j]]),beside=TRUE,col=t(plot_col[[j]]),
@@ -524,7 +524,7 @@ plotCountsPerSampleRelative_plot<-function(directory2,samples,plot_rel,plot_col,
                                            T_col,plot_ref,marks,
                                            qual_lower_bound,qual_upper_bound,j){
     if(directory2!=""){
-        png(file=paste(directory2,"/",samples[j,1],".png",sep=""),width=1600,height=800)
+        png(filename=paste(directory2,"/",samples[j,1],".png",sep=""),width=1600,height=800)
     }
     par(mar=c(16,6,2,1)) 
     barplot(t(plot_rel[[j]]),beside=TRUE,col=t(plot_col[[j]]),
@@ -889,13 +889,13 @@ plotCountsPerTarget_plot<-function(directory2,samples,plot_abs,plot_col,abs_max,
         if(j>1&&calling[[1]][j-1,1]==calling[[1]][j,1]
            &&calling[[1]][j-1,2]==calling[[1]][j,2]){
             counter<-counter+1
-            png(file=paste(directory2,"/",calling[[1]][j,1],";",
+            png(filename=paste(directory2,"/",calling[[1]][j,1],";",
                            calling[[1]][j,2],"_",counter,".png",sep=""),
                 width=1600,height=600)
         }
         if(j==1||calling[[1]][j-1,1]!=calling[[1]][j,1]
            ||calling[[1]][j-1,2]!=calling[[1]][j,2]){
-            png(file=paste(directory2,"/",calling[[1]][j,1],";",
+            png(filename=paste(directory2,"/",calling[[1]][j,1],";",
                            calling[[1]][j,2],".png",sep=""),
                 width=1600,height=600)
             counter<-0
@@ -1177,11 +1177,11 @@ plotCountsPerTargetRelative_plot<-function(directory2,samples,plot_rel,plot_col,
         if(j>1&&calling[[1]][j-1,1]==calling[[1]][j,1]
            &&calling[[1]][j-1,2]==calling[[1]][j,2]){
             counter<-counter+1
-            png(file=paste(directory2,"/",calling[[1]][j,1],";",calling[[1]][j,2],"_",counter,".png",sep=""),
+            png(filename=paste(directory2,"/",calling[[1]][j,1],";",calling[[1]][j,2],"_",counter,".png",sep=""),
                 width=1600,height=600)
         }
         if(j==1||calling[[1]][j-1,1]!=calling[[1]][j,1]||calling[[1]][j-1,2]!=calling[[1]][j,2]){
-            png(file=paste(directory2,"/",calling[[1]][j,1],";",calling[[1]][j,2],".png",sep=""),
+            png(filename=paste(directory2,"/",calling[[1]][j,1],";",calling[[1]][j,2],".png",sep=""),
                 width=1600,height=600)
             counter<-0
         }
@@ -1299,7 +1299,7 @@ plotCountsPerSampleVcf_plot<-function(directory2,samples,plot_abs,plot_col,
                                       plot_ref,marks,qual_lower_bound,
                                       qual_upper_bound,j){
     if(directory2!=""){
-        png(file=paste(directory2,"/",samples[j,1],".png",sep=""),width=1600,
+        png(filename=paste(directory2,"/",samples[j,1],".png",sep=""),width=1600,
             height=800)   
     }
     par(mar=c(16,6,2,1)) 
@@ -1628,7 +1628,7 @@ plotCountsPerSampleRelativeVcf_plot<-function(directory2,samples,plot_rel,
                                               marks,qual_lower_bound,
                                               qual_upper_bound,j){
     if(directory2!=""){
-        png(file=paste(directory2,"/",samples[j,1],".png",sep=""),width=1600,
+        png(filename=paste(directory2,"/",samples[j,1],".png",sep=""),width=1600,
             height=800)
     }
     par(mar=c(16,6,2,1)) 
@@ -1917,11 +1917,11 @@ plotCountsPerTargetVcf_plot<-function(directory2,samples,plot_abs,plot_col,
         if(j>1&&calling[[1]][j-1,1]==calling[[1]][j,1]
            &&calling[[1]][j-1,2]==calling[[1]][j,2]){
             counter<-counter+1
-            png(file=paste(directory2,"/",calling[[1]][j,1],";",calling[[1]][j,2],"_",counter,".png",sep=""),
+            png(filename=paste(directory2,"/",calling[[1]][j,1],";",calling[[1]][j,2],"_",counter,".png",sep=""),
                 width=1600,height=600)
         }
         if(j==1||calling[[1]][j-1,1]!=calling[[1]][j,1]||calling[[1]][j-1,2]!=calling[[1]][j,2]){
-            png(file=paste(directory2,"/",calling[[1]][j,1],";",calling[[1]][j,2],".png",sep=""),
+            png(filename=paste(directory2,"/",calling[[1]][j,1],";",calling[[1]][j,2],".png",sep=""),
                 width=1600,height=600)
             counter<-0
         }
@@ -2265,12 +2265,12 @@ plotCountsPerTargetRelativeVcf_plot<-function(directory2,samples,plot_rel,
         if(j>1&&calling[[1]][j-1,1]==calling[[1]][j,1]
            &&calling[[1]][j-1,2]==calling[[1]][j,2]){
             counter<-counter+1
-            png(file=paste(directory2,"/",calling[[1]][j,1],";",calling[[1]][j,2],"_",counter,".png",sep=""),
+            png(filename=paste(directory2,"/",calling[[1]][j,1],";",calling[[1]][j,2],"_",counter,".png",sep=""),
                 width=1600,height=600)
         }
         if(j==1||calling[[1]][j-1,1]!=calling[[1]][j,1]
            ||calling[[1]][j-1,2]!=calling[[1]][j,2]){
-            png(file=paste(directory2,"/",calling[[1]][j,1],";",calling[[1]][j,2],".png",sep=""),
+            png(filename=paste(directory2,"/",calling[[1]][j,1],";",calling[[1]][j,2],".png",sep=""),
                 width=1600,height=600)
             counter<-0
         }
