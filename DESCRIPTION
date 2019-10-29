@@ -2,7 +2,7 @@ Package: BBCAnalyzer
 Type: Package
 Title: BBCAnalyzer: an R/Bioconductor package for visualizing base
         counts
-Version: 1.15.0
+Version: 1.16.0
 Date: 2016-01-26
 Author: Sarah Sandmann
 Maintainer: Sarah Sandmann <sarah.sandmann@uni-muenster.de>
